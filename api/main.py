@@ -9,8 +9,6 @@ import nltk
 import pymorphy2
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from nltk.probability import FreqDist
-from telethon.sync import TelegramClient
 
 nltk.download('stopwords')
 nltk.download('punkt')
