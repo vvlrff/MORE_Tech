@@ -204,7 +204,7 @@ def digest_accountant():
     return jsonify(items)
 
 
-@app.route('/api/trends')
+@app.route('/api/trendsandinside')
 def trends():
     total_last_week = pd.read_csv("/Users/vvlrff/Desktop/my_projects/MORE_Tech/api/total_last_week.csv", sep = '\t', error_bad_lines=False)
     with open('/Users/vvlrff/Desktop/my_projects/MORE_Tech/api/frequency_dict_half_of_the_year.pkl', 'rb') as f:
