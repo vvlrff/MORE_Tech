@@ -10,12 +10,14 @@ import pymorphy2
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
+from telethon.sync import TelegramClient
 
 nltk.download('stopwords')
 nltk.download('punkt')
 stop_words = stopwords.words('russian')
 stop_words.extend(['который', 'https', 'также', 'другой', 'которые', 'которым', 'которых', 'которая', 'которому', 'каждый'])
 morph = pymorphy2.MorphAnalyzer()
+spec_chars = string.punctuation + '\n\xa0«»\t—…'
 
 app = Flask(__name__)
 
@@ -206,43 +208,6 @@ def digest_accountant():
 
 @app.route('/api/trends')
 def trends():
-    headers = {
-        'Accept':
-        '*/*',
-        'User-Agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.114 YaBrowser/22.9.1.1079 Yowser/2.5 Safari/537.36'
-    }
-    hrefs, bigData = [], []
-    for id in range(10):
-        url = 'https://www.rbc.ru/v10/ajax/get-news-by-filters/?category=business&offset=' + str(
-            id) + '&limit=12'
-        req = requests.get(url, headers=headers)
-        src = req.text
-        soup = BeautifulSoup(src, 'lxml')
-        postHref = soup.find("a").get("href")
-        hrefs.append(postHref)
-
-    for id in range(10):
-        url = 'https://www.rbc.ru/v10/ajax/get-news-by-filters/?category=economics&offset=' + str(
-            id) + '&limit=12'
-        req = requests.get(url, headers=headers)
-        src = req.text
-        soup = BeautifulSoup(src, 'lxml')
-        postHref = soup.find("a").get("href")
-        hrefs.append(postHref)
-
-
-    for href in hrefs:
-        data = []
-        url = href[2:-2]
-        req = requests.get(url, headers=headers)
-        src = req.text
-        soup = BeautifulSoup(src, 'lxml')
-        title = soup.find(class_="article__header__title-in js-slide-title")
-        title_text = title.text
-        data = {"URL": url, "TITLE": title_text}
-        bigData.append(data)
-
     total_last_week = pd.read_csv("/Users/vvlrff/Desktop/my_projects/MORE_Tech/api/total_last_week.csv", sep = '\t', error_bad_lines=False)
     with open('/Users/vvlrff/Desktop/my_projects/MORE_Tech/api/frequency_dict_half_of_the_year.pkl', 'rb') as f:
         frequency_dict_half_of_the_year = pickle.load(f)
